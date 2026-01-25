@@ -1,0 +1,53 @@
+# ============================================
+# SBIR Vector Search - Python Dependencies
+# ============================================
+
+# ============================================
+# SBIR Vector Search - Python Dependencies
+# ============================================
+
+# ==================== Core Framework ====================
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+
+# ==================== Database ====================
+supabase
+psycopg2-binary
+
+# ==================== Vector Store ====================
+# pgvector is included with PostgreSQL/Supabase (extension)
+# No Python package needed - it's a PostgreSQL extension
+# Qdrant (optional, only if using Qdrant instead of pgvector)
+# qdrant-client
+
+# ==================== Embeddings ====================
+# Sentence Transformers (default, for scientific domain embeddings - FREE)
+sentence-transformers
+
+# OpenAI (optional, only if using OpenAI embeddings instead)
+# openai
+# tiktoken
+
+# Groq (for validation query generation)
+groq
+
+# ==================== Text Processing ====================
+# LangChain text splitters (for chunking)
+langchain-text-splitters
+
+# ==================== Utilities ====================
+python-dotenv
+numpy
+
+# ==================== Optional Dependencies ====================
+# Qdrant (only if using Qdrant instead of pgvector)
+# qdrant-client>=1.7.0
+
+# ==================== Development Dependencies (Optional) ====================
+# pytest>=7.4.0
+# pytest-asyncio>=0.21.0
+# black>=23.0.0
+# flake8>=6.1.0
+

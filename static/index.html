@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBIR Vector Search - Hybrid Search System</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">
+                    <span class="logo-icon">🔍</span>
+                    SBIR Vector Search
+                </h1>
+                <p class="tagline">Hybrid Search System for SBIR Awards</p>
+            </div>
+        </header>
+
+        <!-- Search Section -->
+        <section class="search-section">
+            <div class="search-container">
+                <div class="search-box">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        class="search-input" 
+                        placeholder="Search SBIR awards... (e.g., 'quantum computing', 'machine learning', 'renewable energy')"
+                        autocomplete="off"
+                    >
+                    <button id="searchButton" class="search-button">
+                        <span class="search-icon">🔍</span>
+                        Search
+                    </button>
+                </div>
+                <div class="search-options">
+                    <label class="option-label">
+                        <span>Results:</span>
+                        <select id="topKSelect" class="select-input">
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </label>
+                    <label class="option-label">
+                        <span>Semantic Weight (α):</span>
+                        <input type="number" id="alphaInput" class="number-input" 
+                               min="0" max="1" step="0.1" value="0.5" 
+                               title="Weight for semantic search (0.0 to 1.0)">
+                    </label>
+                    <label class="option-label">
+                        <span>Lexical Boost (β):</span>
+                        <input type="number" id="betaInput" class="number-input" 
+                               min="0" step="0.5" value="10.0" 
+                               title="Boost multiplier for lexical search">
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <!-- Loading Indicator -->
+        <div id="loadingIndicator" class="loading-indicator hidden">
+            <div class="spinner"></div>
+            <p>Searching...</p>
+        </div>
+
+        <!-- Error Message -->
+        <div id="errorMessage" class="error-message hidden"></div>
+
+        <!-- Results Section -->
+        <section id="resultsSection" class="results-section hidden">
+            <!-- Tabs -->
+            <div class="tabs-container">
+                <button class="tab-button active" data-tab="hybrid">
+                    <span class="tab-icon">⚡</span>
+                    Hybrid Search
+                    <span id="hybridCount" class="tab-count">0</span>
+                </button>
+                <button class="tab-button" data-tab="lexical">
+                    <span class="tab-icon">📝</span>
+                    Lexical Only
+                    <span id="lexicalCount" class="tab-count">0</span>
+                </button>
+                <button class="tab-button" data-tab="semantic">
+                    <span class="tab-icon">🧠</span>
+                    Semantic Only
+                    <span id="semanticCount" class="tab-count">0</span>
+                </button>
+            </div>
+
+            <!-- Search Metadata -->
+            <div class="metadata-bar">
+                <div class="metadata-item">
+                    <span class="metadata-label">Query:</span>
+                    <span id="queryDisplay" class="metadata-value"></span>
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">Search Time:</span>
+                    <span id="searchTime" class="metadata-value">-</span>
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">Vector Store:</span>
+                    <span id="vectorStore" class="metadata-value">-</span>
+                </div>
+            </div>
+
+            <!-- Results Container -->
+            <div class="results-container">
+                <!-- Hybrid Results -->
+                <div id="hybridResults" class="results-panel active">
+                    <div class="results-list" id="hybridResultsList"></div>
+                </div>
+
+                <!-- Lexical Results -->
+                <div id="lexicalResults" class="results-panel">
+                    <div class="results-list" id="lexicalResultsList"></div>
+                </div>
+
+                <!-- Semantic Results -->
+                <div id="semanticResults" class="results-panel">
+                    <div class="results-list" id="semanticResultsList"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <h2>Start Your Search</h2>
+            <p>Enter a query above to search SBIR awards using hybrid vector search</p>
+            <div class="example-queries">
+                <p class="examples-label">Try these examples:</p>
+                <div class="example-tags">
+                    <button class="example-tag" data-query="quantum computing">quantum computing</button>
+                    <button class="example-tag" data-query="machine learning">machine learning</button>
+                    <button class="example-tag" data-query="renewable energy">renewable energy</button>
+                    <button class="example-tag" data-query="biomedical devices">biomedical devices</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Documentation Section -->
+        <section class="documentation-section">
+            <div class="documentation-container">
+                <h2 class="doc-title">📚 Search Parameters & Scoring Documentation</h2>
+                
+                <div class="doc-section">
+                    <h3 class="doc-heading">🔧 Search Parameters</h3>
+                    <div class="doc-content">
+                        <div class="param-item">
+                            <h4>Semantic Weight (α - Alpha)</h4>
+                            <p><strong>Range:</strong> 0.0 to 1.0</p>
+                            <p><strong>Default:</strong> 0.5</p>
+                            <p><strong>Description:</strong> Controls how much weight semantic (meaning-based) search contributes to the final score.</p>
+                            <ul>
+                                <li><strong>Higher values (0.7-1.0):</strong> Emphasizes semantic similarity - finds results that match the meaning/intent of your query, even if exact words don't match.</li>
+                                <li><strong>Lower values (0.0-0.3):</strong> Reduces semantic influence - focuses more on exact word matches.</li>
+                                <li><strong>Example:</strong> With α=0.8, searching "AI" will find "artificial intelligence", "machine learning", and "neural networks" even if those exact words aren't in the query.</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="param-item">
+                            <h4>Lexical Boost (β - Beta)</h4>
+                            <p><strong>Range:</strong> 0.0 and above</p>
+                            <p><strong>Default:</strong> 10.0</p>
+                            <p><strong>Description:</strong> Multiplier that boosts the importance of exact word matches (lexical search).</p>
+                            <ul>
+                                <li><strong>Higher values (10.0+):</strong> Strongly prioritizes exact word matches - awards containing your exact search terms will rank much higher.</li>
+                                <li><strong>Lower values (1.0-5.0):</strong> Reduces the boost for exact matches, making semantic results more competitive.</li>
+                                <li><strong>Example:</strong> With β=15.0, searching "quantum computing" will heavily favor awards that contain both words "quantum" and "computing" over those that only match the concept.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="doc-section">
+                    <h3 class="doc-heading">📊 Score Calculation</h3>
+                    <div class="doc-content">
+                        <div class="formula-box">
+                            <h4>Hybrid Score Formula</h4>
+                            <div class="formula">
+                                <strong>Final Score = (α × Semantic Score) + (β × Lexical Score)</strong>
+                            </div>
+                            <p>Where:</p>
+                            <ul>
+                                <li><strong>Semantic Score:</strong> Cosine similarity between query embedding and award chunk embeddings (range: 0.0 to 1.0, where 1.0 = perfect match)</li>
+                                <li><strong>Lexical Score:</strong> Term frequency-based score from PostgreSQL full-text search (typically 0.0 to 10.0+, higher = more matches)</li>
+                                <li><strong>α (Alpha):</strong> Semantic weight parameter (0.0 to 1.0)</li>
+                                <li><strong>β (Beta):</strong> Lexical boost multiplier (0.0+)</li>
+                            </ul>
+                        </div>
+
+                        <div class="example-box">
+                            <h4>Example Calculation</h4>
+                            <p>Let's say an award has:</p>
+                            <ul>
+                                <li>Semantic Score: 0.85 (very similar in meaning)</li>
+                                <li>Lexical Score: 2.5 (contains some query terms)</li>
+                                <li>α = 0.5, β = 10.0</li>
+                            </ul>
+                            <div class="calculation">
+                                <p><strong>Final Score = (0.5 × 0.85) + (10.0 × 2.5)</strong></p>
+                                <p>= 0.425 + 25.0</p>
+                                <p>= <strong>25.425</strong></p>
+                            </div>
+                            <p class="note">This award would rank high because it has both good semantic similarity AND contains exact query terms.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="doc-section">
+                    <h3 class="doc-heading">🎯 How Parameters Affect Results</h3>
+                    <div class="doc-content">
+                        <div class="scenario-grid">
+                            <div class="scenario-card">
+                                <h4>High Semantic, Low Lexical (α=0.8, β=5.0)</h4>
+                                <p><strong>Best for:</strong> Finding conceptually related awards</p>
+                                <p><strong>Example:</strong> Search "AI" finds "machine learning", "neural networks", "deep learning" even without exact word matches.</p>
+                            </div>
+                            
+                            <div class="scenario-card">
+                                <h4>Low Semantic, High Lexical (α=0.2, β=15.0)</h4>
+                                <p><strong>Best for:</strong> Finding exact keyword matches</p>
+                                <p><strong>Example:</strong> Search "quantum computing" heavily favors awards that contain both words exactly.</p>
+                            </div>
+                            
+                            <div class="scenario-card">
+                                <h4>Balanced (α=0.5, β=10.0)</h4>
+                                <p><strong>Best for:</strong> General purpose search</p>
+                                <p><strong>Example:</strong> Combines both exact matches and semantic similarity for comprehensive results.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="doc-section">
+                    <h3 class="doc-heading">🔍 Search Types Explained</h3>
+                    <div class="doc-content">
+                        <div class="search-type-grid">
+                            <div class="search-type-card">
+                                <h4>⚡ Hybrid Search</h4>
+                                <p>Combines both lexical and semantic search using the formula above. This is the default and usually gives the best results.</p>
+                            </div>
+                            
+                            <div class="search-type-card">
+                                <h4>📝 Lexical Search</h4>
+                                <p>Uses PostgreSQL full-text search to find exact word matches. Fast and precise for keyword searches. Uses GIN indexes for performance.</p>
+                            </div>
+                            
+                            <div class="search-type-card">
+                                <h4>🧠 Semantic Search</h4>
+                                <p>Uses vector embeddings to find awards with similar meaning. Great for finding related concepts even without exact word matches.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Add tunnel skip warning headers (for initial page load)
+        // This is a workaround for tunnel services' free tier warning pages
+        const hostname = window.location.hostname;
+        
+        if (hostname.includes('ngrok-free.app') || hostname.includes('ngrok.io')) {
+            // ngrok
+            const meta = document.createElement('meta');
+            meta.httpEquiv = 'ngrok-skip-browser-warning';
+            meta.content = 'true';
+            document.head.appendChild(meta);
+        } else if (hostname.includes('loca.lt')) {
+            // localtunnel
+            const meta = document.createElement('meta');
+            meta.httpEquiv = 'bypass-tunnel-reminder';
+            meta.content = 'true';
+            document.head.appendChild(meta);
+        }
+    </script>
+    <script src="/static/app.js?v=4"></script>
+</body>
+</html>

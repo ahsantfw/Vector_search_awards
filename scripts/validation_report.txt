@@ -1,0 +1,180 @@
+================================================================================
+VECTOR DATABASE VALIDATION REPORT
+Ground Truth Methodology - Synthetic Query Evaluation
+================================================================================
+
+Generated: 2026-01-25 22:10:09
+Model: text-embedding-3-large (openai)
+Vector Store: pgvector
+Chunk Size: 500 tokens
+Chunk Overlap: 100 tokens
+
+================================================================================
+PERFORMANCE METRICS
+================================================================================
+
+Total Queries: 100
+Recall@5: 1.000 ± 0.000
+MRR (Mean Reciprocal Rank): 0.901 ± 0.216
+Queries with Recall@5: 100.0/100
+Queries with MRR: 100/100
+
+================================================================================
+VALIDATION THRESHOLD
+================================================================================
+
+✅ PASS: Recall@5 = 1.000 >= 0.7 (Threshold)
+
+================================================================================
+QUERY-BY-QUERY RESULTS
+================================================================================
+
+1. ✅ Query: What role do localized thermodynamic fluctuations play in modulating the photoca...
+   Ground Truth: DE-SC0025804 | Rank: 2 | Recall@5: 1.00 | MRR: 0.500
+
+2. ✅ Query: How do the synergistic interactions between plasmonic nanoparticles and semicond...
+   Ground Truth: DE-SC0025804 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+3. ✅ Query: In what ways can the development of novel metamaterials and nanostructured archi...
+   Ground Truth: DE-SC0025804 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+4. ✅ Query: What are the key challenges and limitations associated with integrating ultrafas...
+   Ground Truth: DE-SC0025804 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+5. ✅ Query: Can the insights gained from this research on the interplay between thermal ener...
+   Ground Truth: DE-SC0025804 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+6. ✅ Query: What synergies can be leveraged between academic institutions and national labor...
+   Ground Truth: DE-SC0025742 | Rank: 2 | Recall@5: 1.00 | MRR: 0.500
+
+7. ✅ Query: How can competency-based progression models be designed to support students from...
+   Ground Truth: DE-SC0025742 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+8. ✅ Query: In what ways can interdisciplinary curricula in accelerator science and technolo...
+   Ground Truth: DE-SC0025742 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+9. ✅ Query: What are the key challenges and opportunities associated with integrating resear...
+   Ground Truth: DE-SC0025742 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+10. ✅ Query: How can the outcomes of apprenticeship programs in accelerator R&D be used to in...
+   Ground Truth: DE-SC0025742 | Rank: 2 | Recall@5: 1.00 | MRR: 0.500
+
+11. ✅ Query: What methodologies can be employed to mitigate the effects of radiation hardenin...
+   Ground Truth: DE-SC0025727 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+12. ✅ Query: How do the synergistic interactions between irradiation-induced defect clusters ...
+   Ground Truth: DE-SC0025727 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+13. ✅ Query: In the context of high-power target applications, what are the key trade-offs be...
+   Ground Truth: DE-SC0025727 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+14. ✅ Query: What role do machine learning-based surrogate models play in facilitating the ex...
+   Ground Truth: DE-SC0025727 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+15. ✅ Query: Under what conditions can the employment of data-driven materials informatics ap...
+   Ground Truth: DE-SC0025727 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+16. ✅ Query: What methodologies can be employed to integrate pedagogical approaches in human-...
+   Ground Truth: DE-SC0025722 | Rank: 3 | Recall@5: 1.00 | MRR: 0.333
+
+17. ✅ Query: How can interdisciplinary research collaborations between academia and national ...
+   Ground Truth: DE-SC0025722 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+18. ✅ Query: In what ways can experiential learning opportunities, including internships and ...
+   Ground Truth: DE-SC0025722 | Rank: 2 | Recall@5: 1.00 | MRR: 0.500
+
+19. ✅ Query: What role can concentrated efforts in curriculum development, such as the establ...
+   Ground Truth: DE-SC0025722 | Rank: 2 | Recall@5: 1.00 | MRR: 0.500
+
+20. ✅ Query: To what extent can targeted initiatives aimed at promoting diversity and inclusi...
+   Ground Truth: DE-SC0025722 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+21. ✅ Query: What are the underlying thermodynamic principles that govern the synergistic rel...
+   Ground Truth: DE-SC0025701 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+22. ✅ Query: How do the morphological and crystallographic characteristics of disordered meta...
+   Ground Truth: DE-SC0025701 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+23. ✅ Query: In the context of electrochemical separation of uranyl ions, what is the relatio...
+   Ground Truth: DE-SC0025701 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+24. ✅ Query: What are the key mechanistic differences between the electrochemical intercalati...
+   Ground Truth: DE-SC0025701 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+25. ✅ Query: How do the in situ measurements of strain and stress in metal oxide host materia...
+   Ground Truth: DE-SC0025701 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+26. ✅ Query: What methodologies can be employed to enhance the fidelity of thermodynamic prop...
+   Ground Truth: DE-SC0024751 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+27. ✅ Query: How do advancements in real-time flow measurement technologies impact the effica...
+   Ground Truth: DE-SC0024751 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+28. ✅ Query: In the context of geothermal power generation, what are the key factors influenc...
+   Ground Truth: DE-SC0024751 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+29. ✅ Query: What role do diagnostic metrics, such as enthalpy and fluid phase fraction, play...
+   Ground Truth: DE-SC0024751 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+30. ✅ Query: To what extent can the development of advanced, real-time flow measurement syste...
+   Ground Truth: DE-SC0024751 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+31. ✅ Query: What synergistic relationships between surface topography and electrochemical po...
+   Ground Truth: DE-SC0024716 | Rank: 4 | Recall@5: 1.00 | MRR: 0.250
+
+32. ✅ Query: How do the nuances of interfacial charge transfer and reactant adsorption influe...
+   Ground Truth: DE-SC0024716 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+33. ✅ Query: In what ways can the development of multiscale computational frameworks, incorpo...
+   Ground Truth: DE-SC0024716 | Rank: 3 | Recall@5: 1.00 | MRR: 0.333
+
+34. ✅ Query: What are the key mechanistic insights that can be gleaned from the study of comp...
+   Ground Truth: DE-SC0024716 | Rank: 2 | Recall@5: 1.00 | MRR: 0.500
+
+35. ✅ Query: To what extent can the integration of fundamental electrochemistry, materials sc...
+   Ground Truth: DE-SC0024716 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+36. ✅ Query: What are the implications of leveraging entanglement entropy as a metric for qua...
+   Ground Truth: DE-SC0024163 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+37. ✅ Query: How do the dynamical properties of bipartite entanglement inform the development...
+   Ground Truth: DE-SC0024163 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+38. ✅ Query: In what ways can the study of out-of-equilibrium quench dynamics and entanglemen...
+   Ground Truth: DE-SC0024163 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+39. ✅ Query: What are the potential benefits and challenges associated with utilizing quantum...
+   Ground Truth: DE-SC0024163 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+40. ✅ Query: Can the development of guiding principles for translating between optimal contro...
+   Ground Truth: DE-SC0024163 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+41. ✅ Query: What mechanistic insights can be gleaned from the interplay between crystallogra...
+   Ground Truth: DE-SC0023679 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+42. ✅ Query: How do the thermodynamic and kinetic factors influencing hydrogen-metal interact...
+   Ground Truth: DE-SC0023679 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+43. ✅ Query: In the context of hydrogen embrittlement, what role do defects and impurities pl...
+   Ground Truth: DE-SC0023679 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+44. ✅ Query: What are the implications of recent advances in shape-memory alloys and 2D mater...
+   Ground Truth: DE-SC0023679 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+45. ✅ Query: To what extent can the principles of interface engineering and materials design ...
+   Ground Truth: DE-SC0023679 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+46. ✅ Query: What synergies can be leveraged between terrestrial ecosystem modeling and hydro...
+   Ground Truth: DE-SC0023596 | Rank: 2 | Recall@5: 1.00 | MRR: 0.500
+
+47. ✅ Query: How can interdisciplinary research frameworks that integrate biogeochemical cycl...
+   Ground Truth: DE-SC0023596 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+48. ✅ Query: In what ways can collaborative research initiatives between academic institution...
+   Ground Truth: DE-SC0023596 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+49. ✅ Query: What role can immersive, experiential learning opportunities play in enhancing t...
+   Ground Truth: DE-SC0023596 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
+
+50. ✅ Query: How can the integration of remote sensing, geospatial analysis, and machine lear...
+   Ground Truth: DE-SC0023596 | Rank: 1 | Recall@5: 1.00 | MRR: 1.000
