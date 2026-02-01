@@ -23,12 +23,12 @@ psycopg2-binary
 # qdrant-client
 
 # ==================== Embeddings ====================
-# Sentence Transformers (default, for scientific domain embeddings - FREE)
+# Sentence Transformers (for fallback/local embeddings - FREE)
 sentence-transformers
 
-# OpenAI (optional, only if using OpenAI embeddings instead)
-# openai
-# tiktoken
+# OpenAI (primary for production)
+openai
+tiktoken
 
 # Groq (for validation query generation)
 groq
@@ -40,6 +40,13 @@ langchain-text-splitters
 # ==================== Utilities ====================
 python-dotenv
 numpy
+
+# ==================== Production Dependencies ====================
+# System monitoring for health checks
+psutil
+
+# HTTP client (included with Python, but explicit for clarity)
+# requests
 
 # ==================== Optional Dependencies ====================
 # Qdrant (only if using Qdrant instead of pgvector)

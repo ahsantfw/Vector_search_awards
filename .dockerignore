@@ -1,0 +1,100 @@
+# ============================================
+# Docker Ignore File
+# Excludes unnecessary files from Docker builds
+# ============================================
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentation
+docs/
+*.md
+README.md
+LICENSE
+
+# Logs and databases
+*.log
+logs/
+*.sqlite
+*.db
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+*.cover
+
+# Jupyter notebooks
+*.ipynb
+.ipynb_checkpoints/
+
+# Data files
+*.csv
+*.json
+*.txt
+!requirements.txt
+
+# Environment files (use Cloud Run env vars instead)
+.env
+.env.*
+config/env.example
+
+# Scripts not needed in production
+scripts/deploy*.sh
+scripts/test_*.py
+scripts/diagnose_*.py
+scripts/validation_*.py
+scripts/create_schema.py
+scripts/delete_schema.py
+scripts/load_csv_to_supabase.py
+
+# Deployment files
+cloudbuild.yaml
+.dockerignore
+Dockerfile
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Project management
+PROJECT_TIMELINE.csv
+uv.lock
+pyproject.toml
+
+# Test files
+test_*.py
+*_test.py
+doe_test_suite.py
+reindex_doe.py
+delete.ipynb

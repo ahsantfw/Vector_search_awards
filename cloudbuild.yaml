@@ -1,0 +1,75 @@
+# ============================================
+# Google Cloud Build Configuration
+# Automated CI/CD for Cloud Run deployment
+# ============================================
+
+steps:
+  # Step 1: Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/sbir-vector-search:$COMMIT_SHA'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/sbir-vector-search:latest'
+      - '.'
+    timeout: 1200s  # 20 minutes for model download
+
+  # Step 2: Push the Docker image to Google Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/sbir-vector-search:$COMMIT_SHA'
+
+  # Step 3: Push the 'latest' tag
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/sbir-vector-search:latest'
+
+  # Step 4: Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'sbir-vector-search'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/sbir-vector-search:$COMMIT_SHA'
+      - '--region'
+      - 'us-central1'  # Change to your preferred region
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'  # Make the service publicly accessible
+      - '--memory'
+      - '2Gi'  # 2GB RAM for model and processing
+      - '--cpu'
+      - '2'  # 2 vCPUs
+      - '--timeout'
+      - '300'  # 5 minutes timeout for long-running indexing
+      - '--max-instances'
+      - '10'  # Auto-scale up to 10 instances
+      - '--min-instances'
+      - '1'  # Keep 1 instance warm to avoid cold starts
+      - '--port'
+      - '8080'
+      - '--set-env-vars'
+      - 'ENVIRONMENT=production,API_HOST=0.0.0.0,API_PORT=8080,EMBEDDING_PROVIDER=openai'
+
+# Images to be pushed to Container Registry
+images:
+  - 'gcr.io/$PROJECT_ID/sbir-vector-search:$COMMIT_SHA'
+  - 'gcr.io/$PROJECT_ID/sbir-vector-search:latest'
+
+# Build timeout (increase for model downloads)
+timeout: 1800s  # 30 minutes total
+
+# Options
+options:
+  machineType: 'N1_HIGHCPU_8'  # Use high-CPU machine for faster builds
+  logging: CLOUD_LOGGING_ONLY
+  
+# Substitutions (can be overridden)
+substitutions:
+  _REGION: 'us-central1'
+  _SERVICE_NAME: 'sbir-vector-search'

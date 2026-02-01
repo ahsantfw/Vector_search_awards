@@ -10,22 +10,19 @@ dependencies = [
     "uvicorn[standard]",
     "pydantic",
     "pydantic-settings",
-
     # ==================== Database ====================
     "supabase",
     "psycopg2-binary",
-
     # ==================== Embeddings ====================
     # Sentence Transformers (default, for scientific domain embeddings - FREE)
     "sentence-transformers",
-
     # ==================== Text Processing ====================
     # LangChain text splitters (for chunking)
     "langchain-text-splitters",
-
     # ==================== Utilities ====================
     "python-dotenv",
     "numpy",
+    "openai>=2.15.0",
 ]
 
 [project.optional-dependencies]

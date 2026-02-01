@@ -77,6 +77,9 @@ class Settings(BaseSettings):
     API_HOST: str = os.getenv("API_HOST", "0.0.0.0")
     API_PORT: int = int(os.getenv("API_PORT", "8000"))
     
+    # ==================== Security ====================
+    INDEXING_API_KEY: str = os.getenv("INDEXING_API_KEY", "")
+    
     # ==================== Validation ====================
     def validate_vector_store(self) -> str:
         """Validate vector store choice"""

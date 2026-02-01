@@ -36,6 +36,9 @@ Access the UI at: `http://localhost:8000`
 - 📊 **Transparent**: Shows search scores and matching chunks
 - 💰 **Free Embeddings**: Uses Sentence Transformers (no API costs)
 - 📈 **Scalable**: Handles thousands of awards with batch processing
+- ☁️ **Cloud Ready**: Deploy to Google Cloud Run in 5 minutes
+- 🔄 **n8n Integration**: Webhook endpoints for dynamic indexing
+- 🚀 **Auto-Deploy**: CI/CD from GitHub
 
 ## 🏗️ Architecture
 
@@ -47,6 +50,11 @@ Access the UI at: `http://localhost:8000`
 
 ## 📚 Documentation
 
+### Quick Start
+- **[5-Minute Cloud Deployment](DEPLOYMENT_QUICKSTART.md)** - Deploy to production FAST
+- **[Setup Complete Summary](CLOUD_RUN_SETUP_COMPLETE.md)** - What's included & checklist
+
+### Detailed Guides
 - **[Complete Manual](docs/COMPLETE_MANUAL.md)** - Comprehensive guide covering everything
   - Installation & Setup
   - Architecture & Design
@@ -55,6 +63,11 @@ Access the UI at: `http://localhost:8000`
   - API Reference
   - Deployment
   - Troubleshooting
+- **[Cloud Run Deployment Guide](docs/CLOUD_RUN_DEPLOYMENT.md)** - 45+ page production deployment guide
+  - GCP setup with screenshots
+  - GitHub CI/CD integration
+  - n8n webhook configuration
+  - Monitoring & cost optimization
 
 ## 📖 Key Components
 
@@ -75,12 +88,33 @@ All configuration is done via environment variables. See `config/env.example` fo
 
 ## 🚀 Deployment
 
-### Local
+### Production (Google Cloud Run) - **RECOMMENDED** ⭐
+
+Deploy to Google Cloud Run with auto-scaling, CI/CD, and n8n integration.
+
+**Simple GitHub Deployment** (Cloud Run access only):
+- 📘 **[Cloud Run + GitHub Deploy Guide](CLOUD_RUN_GITHUB_DEPLOY.md)** ⭐ **START HERE**
+  - Push code to GitHub → Link in Cloud Run console → Deploy
+  - Complete step-by-step with screenshot placeholders
+  - Perfect for users with Cloud Run access only
+
+**Advanced Deployment** (Full GCP access):
+- 🚀 [Automated Script](DEPLOYMENT_QUICKSTART.md) - Deploy in 5 minutes
+- 📖 [Complete Guide](docs/CLOUD_RUN_DEPLOYMENT.md) - 45+ page detailed guide
+
+**Features:**
+- ✅ Auto-scaling (1-10 instances)
+- ✅ Auto-deploy on GitHub push
+- ✅ n8n webhook endpoints for indexing
+- ✅ Production monitoring & logs
+- ✅ $30-50/month estimated cost
+
+### Local Development
 ```bash
-uvicorn src.api.app:app --host 0.0.0.0 --port 8000
+uvicorn src.api.app:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-### Tunnel Services (for public access)
+### Tunnel Services (for testing/demos)
 
 **ngrok** (requires free account):
 ```bash

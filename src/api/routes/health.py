@@ -1,7 +1,9 @@
 """
 Health Check API Routes
-Health check endpoint implementation
+Health check endpoint implementation with Cloud Run optimizations
 """
+import time
+from datetime import datetime
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
@@ -10,7 +12,18 @@ from src.core.logging import get_logger
 from src.database.supabase import get_supabase_client
 from src.database.pgvector import get_pgvector_manager
 
+# Import Cloud Run startup utilities
+try:
+    from src.core.startup import check_memory_usage, health_check_manager
+    STARTUP_MODULE_AVAILABLE = True
+except ImportError:
+    STARTUP_MODULE_AVAILABLE = False
+    health_check_manager = None
+
 logger = get_logger(__name__)
+
+# Track startup time for monitoring
+_startup_time = datetime.utcnow()
 
 router = APIRouter(tags=["health"])
 
@@ -19,12 +32,15 @@ router = APIRouter(tags=["health"])
 @router.get("/health/")
 async def health_check():
     """
-    System health check endpoint
+    System health check endpoint (Cloud Run compatible)
     
     Checks the health of all system components:
     - Database connection (Supabase)
     - Vector store (pgvector/Qdrant)
     - Configuration
+    - Memory usage
+    - Response time
+    - Uptime
     
     Returns:
         dict: Health status with component details
@@ -34,18 +50,27 @@ async def health_check():
         {
           "status": "healthy",
           "version": "1.0.0",
+          "uptime_seconds": 3600,
           "components": {
             "database": "connected",
             "vector_store": "connected",
             "config": "valid"
+          },
+          "system": {
+            "memory_percent": 45.2,
+            "memory_available_mb": 1024.5
           }
         }
         ```
     """
+    start_time = time.time()
+    
     health_status = {
         "status": "healthy",
         "version": "1.0.0",
         "environment": settings.ENVIRONMENT,
+        "timestamp": datetime.utcnow().isoformat(),
+        "uptime_seconds": (datetime.utcnow() - _startup_time).total_seconds(),
         "components": {}
     }
     
@@ -107,12 +132,48 @@ async def health_check():
         health_status["status"] = "unhealthy"
         logger.error(f"Configuration validation failed: {e}")
     
-    # Check OpenAI API key (for embeddings)
-    if settings.OPENAI_API_KEY:
-        health_status["components"]["embeddings"] = "configured"
+    # Check embedding provider
+    if settings.EMBEDDING_PROVIDER == "openai":
+        if settings.OPENAI_API_KEY:
+            health_status["components"]["embeddings"] = "openai_configured"
+        else:
+            health_status["components"]["embeddings"] = "openai_not_configured"
+            health_status["status"] = "degraded"
+    elif settings.EMBEDDING_PROVIDER == "sentence-transformers":
+        health_status["components"]["embeddings"] = "sentence_transformers"
     else:
-        health_status["components"]["embeddings"] = "not_configured"
+        health_status["components"]["embeddings"] = "unknown_provider"
         health_status["status"] = "degraded"
+    
+    # Check system resources (Cloud Run monitoring)
+    if STARTUP_MODULE_AVAILABLE:
+        try:
+            memory_stats = check_memory_usage()
+            if memory_stats:
+                health_status["system"] = memory_stats
+                
+                # Warn if memory usage is high
+                if memory_stats.get("memory_percent", 0) > 85:
+                    health_status["warnings"] = health_status.get("warnings", [])
+                    health_status["warnings"].append("High memory usage")
+                    health_status["status"] = "degraded"
+                
+                # Warn if disk usage is high
+                if memory_stats.get("disk_percent", 0) > 90:
+                    health_status["warnings"] = health_status.get("warnings", [])
+                    health_status["warnings"].append("Low disk space")
+                    health_status["status"] = "degraded"
+        except Exception as e:
+            logger.warning(f"Could not check system resources: {e}")
+    
+    # Add response time
+    response_time_ms = (time.time() - start_time) * 1000
+    health_status["response_time_ms"] = round(response_time_ms, 2)
+    
+    # Warn if response time is slow
+    if response_time_ms > 1000:  # > 1 second
+        health_status["warnings"] = health_status.get("warnings", [])
+        health_status["warnings"].append("Slow health check response")
     
     # Determine HTTP status code
     status_code = 200
@@ -180,16 +241,44 @@ async def readiness_check():
         readiness["checks"]["vector_store"] = "unknown"
         critical_checks.append(False)
     
-    # OpenAI API key must be configured for embeddings
-    if not settings.OPENAI_API_KEY:
-        readiness["checks"]["embeddings"] = "not_configured"
-        critical_checks.append(False)
-    else:
-        readiness["checks"]["embeddings"] = "ready"
+    # Embedding provider must be configured
+    if settings.EMBEDDING_PROVIDER == "openai":
+        if not settings.OPENAI_API_KEY:
+            readiness["checks"]["embeddings"] = "openai_not_configured"
+            critical_checks.append(False)
+        else:
+            readiness["checks"]["embeddings"] = "openai_ready"
+            critical_checks.append(True)
+    elif settings.EMBEDDING_PROVIDER == "sentence-transformers":
+        readiness["checks"]["embeddings"] = "sentence_transformers_ready"
         critical_checks.append(True)
+    else:
+        readiness["checks"]["embeddings"] = "unknown_provider"
+        critical_checks.append(False)
     
     # System is ready only if all critical checks pass
     readiness["ready"] = all(critical_checks)
     
     status_code = 200 if readiness["ready"] else 503
     return JSONResponse(content=readiness, status_code=status_code)
+
+
+@router.get("/liveness")
+@router.get("/liveness/")
+async def liveness_check():
+    """
+    Liveness check endpoint for Cloud Run
+    
+    Simple check that returns 200 if the service is alive.
+    This is used by Cloud Run to determine if the container should be restarted.
+    
+    Returns:
+        dict: Simple status message
+    """
+    return JSONResponse(
+        content={
+            "alive": True,
+            "timestamp": datetime.utcnow().isoformat()
+        },
+        status_code=200
+    )

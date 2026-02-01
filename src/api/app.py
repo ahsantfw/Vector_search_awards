@@ -12,7 +12,7 @@ from pathlib import Path
 
 from src.core.config import settings
 from src.core.logging import get_logger
-from src.api.routes import search, health
+from src.api.routes import search, health, indexing
 
 logger = get_logger(__name__)
 
@@ -54,6 +54,7 @@ app.add_middleware(
 # Include routers
 app.include_router(search.router)
 app.include_router(health.router)
+app.include_router(indexing.router)
 
 
 @app.get("/")
@@ -75,6 +76,7 @@ async def root():
         "endpoints": {
             "search": "/search",
             "health": "/health",
+            "indexing": "/indexing",
             "docs": "/docs",
             "redoc": "/redoc",
             "ui": "/static/index.html"
@@ -82,6 +84,7 @@ async def root():
         "features": [
             "Hybrid search (lexical + semantic)",
             "Multi-approach search (hybrid, lexical, semantic)",
+            "Dynamic indexing via API webhooks",
             "Supabase integration",
             "pgvector/Qdrant support"
         ]
